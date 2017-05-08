@@ -121,9 +121,9 @@ if __name__ == '__main__':
         # if texts are to be sent:
     if text:
         to_text = dict()
-        phone_numbers = {'Luke': '+12406788175',
-                        'Kelly': '+16102976967',
-                        'Sarah': '+18015975812'}
+        phone_numbers = {'Luke': '+1231231234',
+                        'Kelly': '+1231231234',
+                        'Sarah': '+1231231234'}
         for row in rows:
             if sheet.cell(row, 4).value.lower() not in acceptable_responses:
                 # to_email.append(sheet.cell(row, 3).value)
