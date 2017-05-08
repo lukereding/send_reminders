@@ -3,8 +3,16 @@ sends reminders to people when they don't do their fish care chores. Reads data 
 
 ```bash
 
- /Users/lukereding/anaconda2/envs/google_sheets/bin/python reminder.py
+ /Users/lukereding/anaconda2/envs/google_sheets/bin/python reminder.py --help
+
+usage: reminder.py [-h] [-e] [-t]
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -e, --email  Send email to those that have not done water changes?
+  -t, --text   Send text message to those that have not done water changes?
+
 
 ```
 
-using the path to the python interpreter in the virtual environmental called `google_sheets`.
+...using the path to the python interpreter in the virtual environmental called `google_sheets`.
