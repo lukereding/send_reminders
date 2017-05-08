@@ -4,6 +4,9 @@ import time
 import smtplib
 import os
 import sys
+import bandwidth
+import argparse
+import plivo
 
 ''''
 
@@ -14,14 +17,13 @@ path to interpreter: /Users/lukereding/anaconda2/envs/google_sheets/bin/python
 needs an environmental variable called 'gmail' with the gmail password
 '''
 
-
 def get_date():
-    '''Get today's date in the right format'''
+    """Get today's date in the right format"""
     date = time.strftime('%d %B %Y')
     return date
 
 def login_to_sheets():
-    '''Log in to google sheets via API and get the spreadsheet'''
+    """Log in to google sheets via API and get the spreadsheet"""
     # use creds to create a client to interact with the Google Drive API
     scope = ['https://spreadsheets.google.com/feeds']
     creds = ServiceAccountCredentials.from_json_keyfile_name('/Users/lukereding/Downloads/secret_key.json', scope)
@@ -31,8 +33,9 @@ def login_to_sheets():
     sheet = client.open("water changes summer 2017").sheet1
     return sheet
 
+
 def send_email(dict_of_recipients, password):
-    '''Send reminder emails to everyone in dict_of_recipients.'''
+    """Send reminder emails to everyone in dict_of_recipients."""
     smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
     smtpObj.ehlo()
     smtpObj.starttls()
@@ -46,12 +49,37 @@ def send_email(dict_of_recipients, password):
         smtpObj.sendmail('lukereding@gmail.com', email, "Subject: water changes this week\nHey {},\n\nJust a reminder that you are on water change duty this week. Check the lab wiki for more information on water changes, rank assignments, how to sign off once you've done you water changes.\n\nYou can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members. \n\nThanks a lot--\n\nLuke\n\n".format(name))
         print("email sent to {}".format(name))
 
+def send_text(dict_of_recipients, auth_id, token):
+    """Sends text messages, logging when the text was not sent."""
+
+    p = plivo.RestAPI(auth_id, token)
+
+    for name, number in dict_of_recipients.iteritems():
+        print("sending text to {}".format(name))
+        params = {
+            'src': plivo_number,
+            'dst' : number,
+            'text' : "Hi {}, just a reminder that you have water changes this week that you have either not done or not signed off on. Do not reply.".format(name),
+            'method' : 'POST'
+        }
+        response = p.send_message(params)
+        # check to make sure it's 202?
+
+def parse_arguments():
+    """Parse arguments."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-e", "--email", help="Send email to those that have not done water changes?", action = "store_true")
+    parser.add_argument("-t", "--text", help="Send text message to those that have not done water changes?", action = "store_true")
+    args = parser.parse_args()
+    return args.email, args.text
+
 if __name__ == '__main__':
-    # define dict to store email addresses
-    email_addresses = {'Luke': 'lukereding@utexas.edu', 'Kelly': 'kwallace@utexas.edu', 'Sarah': 'sarah.price@utmail.utexas.edu'}
+
+    email, text = parse_arguments()
+    print("email: {}\ntext: {}".format(email, text))
 
     # define some acceptable responses in the form. All others will be considered uncompleted
-    acceptable_responses = ['done', 'yes', 'finished', 'complete', 'completed', 'changed']
+    acceptable_responses = ['done', 'yes', 'finished', 'complete', 'completed', 'changed', 'yeah', 'yea', 'yep']
 
     # gt today's dat
     date = get_date()
@@ -65,22 +93,54 @@ if __name__ == '__main__':
     # python starts at 0, google sheets starts at 1
     rows = [x + 1 for x in rows]
 
-    # create an empty dict of people to email
-    to_email = {}
+    if email:
+        # define dict to store email addresses
+        email_addresses = {'Luke': 'lukereding@utexas.edu',
+                            'Kelly': 'kwallace@utexas.edu',
+                            'Sarah': 'sarah.price@utmail.utexas.edu'}
 
-    # find out who hasn't been doing their water changes
-    for row in rows:
-        # if they haven't done their water change
-        if sheet.cell(row, 4).value.lower() not in acceptable_responses:
-            # to_email.append(sheet.cell(row, 3).value)
-            to_email[sheet.cell(row, 3).value] = email_addresses[sheet.cell(row, 3).value]
+        # create an empty dict of people to email
+        to_email = dict()
 
-    p = os.environ['gmail']
+        # find out who hasn't been doing their water changes
+        for row in rows:
+            # if they haven't done their water change
+            if sheet.cell(row, 4).value.lower() not in acceptable_responses:
+                # to_email.append(sheet.cell(row, 3).value)
+                to_email[sheet.cell(row, 3).value] = email_addresses[sheet.cell(row, 3).value]
 
-    # send the emails
-    try:
-        send_email(to_email, p)
-        print("emails sent")
-    except:
-        print("some or all emails were not sent.")
+        p = os.environ['gmail']
+
+        # send the emails
+        try:
+            send_email(to_email, p)
+            print("emails sent")
+        except:
+            print("some or all emails were not sent.")
+
+        # if texts are to be sent:
+    if text:
+        to_text = dict()
+        phone_numbers = {'Luke': '+12406788175',
+                        'Kelly': '+16102976967',
+                        'Sarah': '+18015975812'}
+        for row in rows:
+            if sheet.cell(row, 4).value.lower() not in acceptable_responses:
+                # to_email.append(sheet.cell(row, 3).value)
+                to_text[sheet.cell(row, 3).value] = phone_numbers[sheet.cell(row, 3).value]
+
+        plivo_number = os.environ.get('plivo_number')
+        auth_id = os.environ.get('PLIVO_ID')
+        token = os.environ.get('PLIVO_TOKEN')
+
+        # try sending the texts
+        if token and auth_id:
+            try:
+                send_text(to_text, auth_id, token)
+                print("texts sent.")
+            except:
+                print("some or all texts were not sent.")
+        else:
+            print("problem assigning env variables")
+
     sys.exit("everything worked.")
