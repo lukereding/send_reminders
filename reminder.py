@@ -59,7 +59,7 @@ def send_text(dict_of_recipients, auth_id, token):
         params = {
             'src': plivo_number,
             'dst' : number,
-            'text' : "Hi {}, just a reminder that you have water changes this week that you have either not done or not signed off on. Do not reply.".format(name),
+            'text' : "Hi {}, just a reminder that you have water changes this week that you have either not done or not signed off on. Thanks!".format(name),
             'method' : 'POST'
         }
         response = p.send_message(params)
