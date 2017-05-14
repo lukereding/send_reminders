@@ -4,18 +4,17 @@ import time
 import smtplib
 import os
 import sys
-import bandwidth
 import argparse
 import plivo
-import wikiquotes
+import requests
 
 ''''
 
-Python script that retreives a google sheet, finds who hasn't done water changes, then sends them a reminder email.
+Python3 script that retreives a google sheet, finds who hasn't done water changes, then sends them a reminder email with a not quotations.
 
-path to interpreter: /Users/lukereding/anaconda2/envs/google_sheets/bin/python
+path to interpreter: /Users/lukereding/anaconda2/envs/google_sheets3/bin/python
 
-needs an environmental variable called 'gmail' with the gmail password
+needs an environmental variable called 'gmail' with the gmail password and various PLIVO variables to access the PLIVO API to send texts
 '''
 
 def get_date():
@@ -34,21 +33,31 @@ def login_to_sheets():
     sheet = client.open("water changes summer 2017").sheet1
     return sheet
 
+def get_quote():
+    url = 'http://api.forismatic.com/api/1.0/'
+    data = {
+      'method' : 'getQuote',
+      'format': 'text',
+      'lang' :'en',
+      'format': 'text'
+    }
+    response = requests.post(url, data=data)
+    return(str(response.text))
 
 def send_email(dict_of_recipients, password):
     """Send reminder emails to everyone in dict_of_recipients."""
     smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
     smtpObj.ehlo()
     smtpObj.starttls()
+    quote = get_quote()
     try:
         smtpObj.login('lukereding@gmail.com', password)
     except:
         print("could not log in")
         # sys.exit(1)
     # send the emails
-    quote = print(wikiquote.quote_of_the_day()[0] + ': ' + wikiquote.quote_of_the_day()[1])
-    for name, email in dict_of_recipients.iteritems():
-        smtpObj.sendmail('lukereding@gmail.com', email, "Subject: water changes this week\nHey {},\n\nJust a reminder that you are on water change duty this week. Check the lab wiki for more information on water changes, rank assignments, how to sign off once you've done you water changes.\n\nYou can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members. \n\nThanks a lot--\n\nLuke\n\n{}".format(name, quote))
+    for name, email in dict_of_recipients.items():
+        smtpObj.sendmail('lukereding@gmail.com', email, "Subject: water changes this week\nHey {name},\n\nJust a reminder that you are on water change duty this week. Check the lab wiki for more information on water changes, rank assignments, how to sign off once you've done you water changes.\n\nYou can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members. \n\nThanks a lot--\n\nLuke\n\n\n{quote}".format(name = name, quote = quote))
         print("email sent to {}".format(name))
 
 def send_text(dict_of_recipients, auth_id, token):
@@ -56,7 +65,7 @@ def send_text(dict_of_recipients, auth_id, token):
 
     p = plivo.RestAPI(auth_id, token)
 
-    for name, number in dict_of_recipients.iteritems():
+    for name, number in dict_of_recipients.items():
         print("sending text to {}".format(name))
         params = {
             'src': plivo_number,
@@ -113,17 +122,20 @@ if __name__ == '__main__':
 
         p = os.environ['gmail']
 
+        # pdb.set_trace()
+
         # send the emails
         try:
             send_email(to_email, p)
             print("emails sent")
         except:
+            print("Unexpected error:" + str(sys.exc_info()))
             print("some or all emails were not sent.")
 
         # if texts are to be sent:
     if text:
         to_text = dict()
-        phone_numbers = {'Luke': '+1231231234',
+        phone_numbers = {'Luke': '+12406788175',
                         'Kelly': '+1231231234',
                         'Sarah': '+1231231234'}
         for row in rows:
