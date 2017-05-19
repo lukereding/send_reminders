@@ -1,0 +1,64 @@
+name: google_sheets3
+channels:
+- !!python/unicode
+  'bioconda'
+- !!python/unicode
+  'conda-forge'
+- !!python/unicode
+  'defaults'
+dependencies:
+- !!python/unicode
+  'httplib2=0.9.2=py36_0'
+- !!python/unicode
+  'pyasn1-modules=0.0.5=py36_0'
+- !!python/unicode
+  'rsa=3.1.4=py36_0'
+- !!python/unicode
+  'google-api-python-client=1.6.2=py36_0'
+- !!python/unicode
+  'gspread=0.6.2=py36_0'
+- !!python/unicode
+  'oauth2client=4.0.0=py36_0'
+- !!python/unicode
+  'requests=2.13.0=py36_0'
+- !!python/unicode
+  'uritemplate=3.0.0=py36_0'
+- !!python/unicode
+  'libiconv=1.14=0'
+- !!python/unicode
+  'libxml2=2.9.4=0'
+- !!python/unicode
+  'libxslt=1.1.29=0'
+- !!python/unicode
+  'lxml=3.7.3=py36_0'
+- !!python/unicode
+  'openssl=1.0.2k=2'
+- !!python/unicode
+  'pip=9.0.1=py36_1'
+- !!python/unicode
+  'pyasn1=0.2.3=py36_0'
+- !!python/unicode
+  'python=3.6.1=2'
+- !!python/unicode
+  'readline=6.2=2'
+- !!python/unicode
+  'setuptools=27.2.0=py36_0'
+- !!python/unicode
+  'simplejson=3.10.0=py36_0'
+- !!python/unicode
+  'six=1.10.0=py36_0'
+- !!python/unicode
+  'sqlite=3.13.0=0'
+- !!python/unicode
+  'tk=8.5.18=0'
+- !!python/unicode
+  'wheel=0.29.0=py36_0'
+- !!python/unicode
+  'xz=5.2.2=1'
+- !!python/unicode
+  'zlib=1.2.8=3'
+- pip:
+  - plivo==0.9.6
+  - wikiquote==0.1.5
+prefix: !!python/unicode '/Users/lukereding/anaconda2/envs/google_sheets3'
+
