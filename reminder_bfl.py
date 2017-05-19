@@ -28,8 +28,8 @@ def get_date():
 def login_to_sheets():
     """Log in to google sheets via API and get the spreadsheet"""
     # use creds to create a client to interact with the Google Drive API
-    if os.path.exists('/Users/lukereding/Downloads/secret_key.json):
-        p = '/Users/lukereding/Downloads/secret_key.json
+    if os.path.exists('/Users/lukereding/Downloads/secret_key.json'):
+        p = '/Users/lukereding/Downloads/secret_key.json'
     else:
         p = './secret_key.json'
     scope = ['https://spreadsheets.google.com/feeds']
@@ -48,7 +48,10 @@ def get_quote():
       'lang' :'en',
       'format': 'text'
     }
-    response = requests.post(url, data=data)
+    try:
+        response = requests.post(url, data=data)
+    except:
+        response = ""
     return(str(response.text))
 
 def send_email(email_addr, name, password):
