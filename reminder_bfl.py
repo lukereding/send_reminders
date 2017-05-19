@@ -15,6 +15,9 @@ Python3 script that retreives a google sheet and emails people in the morning to
 path to interpreter: /Users/lukereding/anaconda2/envs/google_sheets3/bin/python
 
 needs an environmental variable called 'gmail' with the gmail password
+
+executed as a cron job daily
+/Users/lukereding/anaconda2/envs/google_sheets3/bin/python reminder_bfl.py
 '''
 
 def get_date():
@@ -25,8 +28,12 @@ def get_date():
 def login_to_sheets():
     """Log in to google sheets via API and get the spreadsheet"""
     # use creds to create a client to interact with the Google Drive API
+    if os.path.exists('/Users/lukereding/Downloads/secret_key.json):
+        p = '/Users/lukereding/Downloads/secret_key.json
+    else:
+        p = './secret_key.json'
     scope = ['https://spreadsheets.google.com/feeds']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('/Users/lukereding/Downloads/secret_key.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(p, scope)
     client = gspread.authorize(creds)
     # Find a workbook by name and open the first sheet
     # Make sure you use the right name here.
