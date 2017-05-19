@@ -31,7 +31,7 @@ def login_to_sheets():
     if os.path.exists('/Users/lukereding/Downloads/secret_key.json'):
         p = '/Users/lukereding/Downloads/secret_key.json'
     else:
-        p = './secret_key.json'
+        p = '/home/pi/Documents/send_reminders/secret_key.json'
     scope = ['https://spreadsheets.google.com/feeds']
     creds = ServiceAccountCredentials.from_json_keyfile_name(p, scope)
     client = gspread.authorize(creds)
