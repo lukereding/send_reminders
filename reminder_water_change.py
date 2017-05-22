@@ -59,11 +59,11 @@ def send_email(dict_of_recipients, password):
         # sys.exit(1)
     # send the emails
     for name, email in dict_of_recipients.items():
-        msg = MIMEText()
+        msg = MIMEText("Hey {name},\n\nJust a reminder that you are on water change duty this week. Check the lab wiki for more information on water changes, rank assignments, how to sign off once you've done you water changes.\n\nYou can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members. \n\nThanks a lot--\n\nLuke\n\n\n{quote}".format(name = name, quote = quote))
         msg['Subject'] = 'water changes this week'
         msg['From'] = 'info@lreding.com'
         msg['To'] = email
-        msg = msg.as_string("Hey {name},\n\nJust a reminder that you are on water change duty this week. Check the lab wiki for more information on water changes, rank assignments, how to sign off once you've done you water changes.\n\nYou can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members. \n\nThanks a lot--\n\nLuke\n\n\n{quote}".format(name = name, quote = quote))
+        msg = msg.as_string()
 
         # send the email
         session.sendmail('lukereding@gmail.com', email, msg)
