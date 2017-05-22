@@ -7,6 +7,7 @@ import sys
 import argparse
 import plivo
 import requests
+from email.mime.text import MIMEText
 
 ''''
 
@@ -56,17 +57,23 @@ def get_quote():
 
 def send_email(email_addr, name, password):
     """Send reminder emails to everyone in dict_of_recipients."""
-    smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
-    smtpObj.ehlo()
-    smtpObj.starttls()
+    session = smtplib.SMTP('smtp.gmail.com', 587)
+    session.ehlo()
+    session.starttls()
     quote = get_quote()
     try:
-        smtpObj.login('lukereding@gmail.com', password)
+        session.login('lukereding@gmail.com', password)
     except:
         print("could not log in")
+    
+    msg = MIMEText("Hey {name},\n\nJust a reminder that you're on duty for doing the BFL daily check today.\n\nOnce you complete the check, please fill out the form here: https://docs.google.com/a/utexas.edu/forms/d/e/1FAIpQLSdY-Tb-0UcYn03EZc0dWssTJQjYccAnnPfNXquLH-jsAku8ww/viewform?c=0&w=1.\n\nThe guidelines for doing the inspectations can be found here: https://github.com/lukereding/cummings_lab_members/blob/master/current-members/bfl_daily_checklist.md\n\nThanks a lot!\n\nLuke\n\n\n\n{quote}".format(name = name, quote = quote))
+    msg['Subject'] = 'BFL daily inspection reminder'
+    msg['From'] = 'info@lreding.com'
+    msg['To'] = email_addr
+    msg = msg.as_string()
 
     # send the email
-    smtpObj.sendmail('lukereding@gmail.com', email_addr, "Subject: BFL daily inspection reminder\nHey {name},\n\nJust a reminder that you're on duty for doing the BFL daily check today.\n\nOnce you complete the check, please fill out the form here: https://docs.google.com/a/utexas.edu/forms/d/e/1FAIpQLSdY-Tb-0UcYn03EZc0dWssTJQjYccAnnPfNXquLH-jsAku8ww/viewform?c=0&w=1.\n\nThe guidelines for doing the inspectations can be found here: https://github.com/lukereding/cummings_lab_members/blob/master/current-members/bfl_daily_checklist.md\n\nThanks a lot!\n\nLuke\n\n\n\n{quote}".format(name = name, quote = quote))
+    session.sendmail('lukereding@gmail.com', email_addr, msg)
 
     print("email sent to {}".format(name))
 
