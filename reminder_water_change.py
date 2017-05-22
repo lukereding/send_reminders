@@ -7,6 +7,8 @@ import sys
 import argparse
 import plivo
 import requests
+from email.mime.text import MIMEText
+
 
 ''''
 
@@ -46,18 +48,25 @@ def get_quote():
 
 def send_email(dict_of_recipients, password):
     """Send reminder emails to everyone in dict_of_recipients."""
-    smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
-    smtpObj.ehlo()
-    smtpObj.starttls()
+    session = smtplib.SMTP('smtp.gmail.com', 587)
+    session.ehlo()
+    session.starttls()
     quote = get_quote()
     try:
-        smtpObj.login('lukereding@gmail.com', password)
+        session.login('lukereding@gmail.com', password)
     except:
         print("could not log in")
         # sys.exit(1)
     # send the emails
     for name, email in dict_of_recipients.items():
-        smtpObj.sendmail('lukereding@gmail.com', email, "Subject: water changes this week\nHey {name},\n\nJust a reminder that you are on water change duty this week. Check the lab wiki for more information on water changes, rank assignments, how to sign off once you've done you water changes.\n\nYou can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members. \n\nThanks a lot--\n\nLuke\n\n\n{quote}".format(name = name, quote = quote))
+        msg = MIMEText()
+        msg['Subject'] = 'water changes this week'
+        msg['From'] = 'info@lreding.com'
+        msg['To'] = email
+        msg = msg.as_string("Hey {name},\n\nJust a reminder that you are on water change duty this week. Check the lab wiki for more information on water changes, rank assignments, how to sign off once you've done you water changes.\n\nYou can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members. \n\nThanks a lot--\n\nLuke\n\n\n{quote}".format(name = name, quote = quote))
+
+        # send the email
+        session.sendmail('lukereding@gmail.com', email, msg)
         print("email sent to {}".format(name))
 
 def send_text(dict_of_recipients, auth_id, token):
