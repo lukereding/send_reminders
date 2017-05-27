@@ -8,7 +8,7 @@ import argparse
 import plivo
 import requests
 from email.mime.text import MIMEText
-
+from datetime import date, timedelta
 
 ''''
 
@@ -18,6 +18,17 @@ path to interpreter: /Users/lukereding/anaconda2/envs/google_sheets3/bin/python
 
 needs an environmental variable called 'gmail' with the gmail password and various PLIVO variables to access the PLIVO API to send texts
 '''
+
+def get_old_date(number_days_ago):
+    old_date = date.today() - timedelta(number_days_ago)
+    date = old_date.strftime('%d %B %Y')
+    return date
+
+def get_mondays_date():
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday())
+    monday = monday.strftime('%d %B %Y')
+    return date
 
 def get_date():
     """Get today's date in the right format"""
