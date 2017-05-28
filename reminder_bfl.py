@@ -67,7 +67,7 @@ def send_email(email_addr, name, password):
         print("could not log in")
     
     msg = MIMEText("Hey {name},\n\nJust a reminder that you're on duty for doing the BFL daily check today.\n\nOnce you complete the check, please fill out the form here: https://docs.google.com/a/utexas.edu/forms/d/e/1FAIpQLSdY-Tb-0UcYn03EZc0dWssTJQjYccAnnPfNXquLH-jsAku8ww/viewform?c=0&w=1.\n\nThe guidelines for doing the inspectations can be found here: https://github.com/lukereding/cummings_lab_members/blob/master/current-members/bfl_daily_checklist.md\n\nThanks a lot!\n\nLuke\n\n\n\n{quote}".format(name = name, quote = quote))
-    msg['Subject'] = 'BFL daily inspection reminder'
+    msg['Subject'] = "BFL daily inspection reminder " + u"\U0001F41F"
     msg['From'] = 'info@lreding.com'
     msg['To'] = email_addr
     msg = msg.as_string()
