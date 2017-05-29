@@ -112,8 +112,8 @@ if __name__ == '__main__':
     # define some acceptable responses in the form. All others will be considered uncompleted
     acceptable_responses = ['done', 'yes', 'finished', 'complete', 'completed', 'changed', 'yeah', 'yea', 'yep']
 
-    # gt today's dat
-    date = get_date()
+    # get monday's date
+    date = get_mondays_date()
 
     # get the google sheet
     sheet = login_to_sheets()
@@ -128,7 +128,14 @@ if __name__ == '__main__':
         # define dict to store email addresses
         email_addresses = {'Luke': 'lukereding@utexas.edu',
                             'Kelly': 'kwallace@utexas.edu',
-                            'Sarah': 'sarah.price@utmail.utexas.edu'}
+                            'Sarah': 'sarah.price@utmail.utexas.edu',
+                          'Jennifer': 'jschlauch@utexas.edu',
+                          'Marisa': 'marisafajardo97@gmail.com',
+                          'Lily': 'lily.anastacia@gmail.com',
+                          'Daniel': 'danielhauser77@gmail.com',
+                          'Huynh': 'huynhpham100@yahoo.com',
+                          'Caleb': 'cnfleischer@gmail.com',
+                          'Adam': 'adamredmer@hotmail.com'}
 
         # create an empty dict of people to email
         to_email = dict()
