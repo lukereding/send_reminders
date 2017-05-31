@@ -4,9 +4,9 @@ Sends reminders to undergrad, automatically, when they don't do their fish care 
 
 ```bash
 
- /Users/lukereding/anaconda2/envs/google_sheets/bin/python reminder.py --help
+ /Users/lukereding/anaconda2/envs/google_sheets/bin/python reminder_water_change.py --help
 
-usage: reminder.py [-h] [-e] [-t]
+usage: reminder_water_change.py [-h] [-e] [-t]
 
 optional arguments:
   -h, --help   show this help message and exit
@@ -24,4 +24,4 @@ Meant to be executed in as a cron job.
 
 > 10 4 * * 4-5 python /Users/lukereding/anaconda2/envs/google_sheets/bin/python/reminder_water_change.py -e
 
-to check the google sheet and send an email to delinquents every Thursday at 4:10am. 
+to check the google sheet and send an email to delinquents every Thursday and Friday at 4:10am. 
