@@ -62,7 +62,6 @@ def send_email(dict_of_recipients, password):
     session = smtplib.SMTP('smtp.gmail.com', 587)
     session.ehlo()
     session.starttls()
-    quote = get_quote()
     try:
         session.login('lukereding@gmail.com', password)
     except:
@@ -94,7 +93,7 @@ Luke
 
 
 
-{quote}""".format(rack = rack, name = name, quote = quote))
+{quote}""".format(rack = rack, name = name, quote = get_quote()))
         # otherwise
         else:
             msg = MIMEText("""
@@ -116,7 +115,7 @@ Luke
 
 
 
-{quote}""".format(rack = rack, name = name, quote = quote))
+{quote}""".format(rack = rack, name = name, quote = get_quote()))
         msg['Subject'] = u'\U0001F514' + ' water changes this week'
         msg['From'] = 'info@lreding.com'
         msg['To'] = email
