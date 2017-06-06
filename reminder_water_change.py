@@ -8,7 +8,7 @@ import argparse
 import plivo
 import requests
 from email.mime.text import MIMEText
-from datetime import date, timedelta
+import datetime
 
 ''''
 
@@ -20,7 +20,7 @@ needs an environmental variable called 'gmail' with the gmail password and vario
 '''
 
 def get_old_date(number_days_ago):
-    old_date = date.today() - timedelta(number_days_ago)
+    old_date = datetime.date.today() - datetime.timedelta(number_days_ago)
     date = old_date.strftime('%d %B %Y')
     return date
 
@@ -28,7 +28,7 @@ def get_mondays_date():
     today = datetime.date.today()
     monday = today - datetime.timedelta(days=today.weekday())
     monday = monday.strftime('%d %B %Y')
-    return date
+    return monday
 
 def get_date():
     """Get today's date in the right format"""
@@ -69,8 +69,53 @@ def send_email(dict_of_recipients, password):
         print("could not log in")
         # sys.exit(1)
     # send the emails
-    for name, email in dict_of_recipients.items():
-        msg = MIMEText("Hey {name},\n\nJust a reminder that you are on water change duty this week. Check the lab wiki for more information on water changes, rank assignments, how to sign off once you've done you water changes.\n\nYou can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members. \n\nThanks a lot--\n\nLuke\n\n\n{quote}".format(name = name, quote = quote))
+    for name, [email, rack] in dict_of_recipients.items():
+        # if it's monday, just send a 'letting you know' message
+        if datetime.datetime.today().weekday() == 0:
+            msg = MIMEText("""
+Hey {name},
+
+Congrats! You're on water change duty this week!
+
+You have been assigned rack {rack} this week.
+
+You can access the lab wiki  for more information about water chagnes here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
+
+Be sure to sign off when you're done here:
+https://docs.google.com/spreadsheets/d/1pVwqyetFLGVl_2qQ40qCH0Nvhe7ODzKC7J_oyQsiOQg/edit?usp=sharing.
+
+And remember, come to one of the lab veterans with any questions you have.
+
+Thanks!
+
+Luke
+
+
+
+
+{quote}""".format(rack = rack, name = name, quote = quote))
+        # otherwise
+        else:
+            msg = MIMEText("""
+Hey {name},
+
+Just a reminder that you are on water change duty this week. Water changes should be completed by the end of the week. Check the lab wiki for more information on water changes and rack assignments.
+
+You can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
+
+You have been assigned rack {rack} this week.
+
+Be sure to sign off when you're done here:
+https://docs.google.com/spreadsheets/d/1pVwqyetFLGVl_2qQ40qCH0Nvhe7ODzKC7J_oyQsiOQg/edit?usp=sharing.
+
+Thanks a lot--
+
+Luke
+
+
+
+
+{quote}""".format(rack = rack, name = name, quote = quote))
         msg['Subject'] = u'\U0001F514' + ' water changes this week'
         msg['From'] = 'info@lreding.com'
         msg['To'] = email
@@ -145,7 +190,7 @@ if __name__ == '__main__':
             # if they haven't done their water change
             if sheet.cell(row, 4).value.lower() not in acceptable_responses:
                 # to_email.append(sheet.cell(row, 3).value)
-                to_email[sheet.cell(row, 3).value] = email_addresses[sheet.cell(row, 3).value]
+                to_email[sheet.cell(row, 3).value] = [email_addresses[sheet.cell(row, 3).value], sheet.cell(row, 2).value]
 
         p = os.environ['gmail']
 
