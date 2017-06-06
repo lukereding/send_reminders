@@ -99,7 +99,7 @@ Luke
             msg = MIMEText("""
 Hey {name},
 
-Just a reminder that you are on water change duty this week. Water changes should be completed by the end of the week. Check the lab wiki for more information on water changes and rack assignments. You can access the wiki here: 
+Just a reminder that you are on water change duty this week. Water changes should be completed by the end of the week. Check the lab wiki for more information on water changes. You can access the wiki here: 
 
 https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
 
