@@ -79,7 +79,8 @@ Congrats! You're on water change duty this week!
 
 You have been assigned rack {rack} this week.
 
-You can access the lab wiki  for more information about water chagnes here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
+You can access the lab wiki for more information about water changes here: 
+https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
 
 Be sure to sign off when you're done here:
 https://docs.google.com/spreadsheets/d/1pVwqyetFLGVl_2qQ40qCH0Nvhe7ODzKC7J_oyQsiOQg/edit?usp=sharing.
@@ -99,11 +100,11 @@ Luke
             msg = MIMEText("""
 Hey {name},
 
-Just a reminder that you are on water change duty this week. Water changes should be completed by the end of the week. Check the lab wiki for more information on water changes and rack assignments.
+Just a reminder that you are on water change duty this week. Water changes should be completed by the end of the week. Check the lab wiki for more information on water changes and rack assignments. You can access the wiki here: 
 
-You can access the wiki here: https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
+https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
 
-You have been assigned rack {rack} this week.
+As a reminder, you have been assigned rack {rack} this week.
 
 Be sure to sign off when you're done here:
 https://docs.google.com/spreadsheets/d/1pVwqyetFLGVl_2qQ40qCH0Nvhe7ODzKC7J_oyQsiOQg/edit?usp=sharing.
