@@ -155,7 +155,7 @@ if __name__ == '__main__':
     print("email: {}\ntext: {}".format(email, text))
 
     # define some acceptable responses in the form. All others will be considered uncompleted
-    acceptable_responses = ['done', 'yes', 'finished', 'complete', 'completed', 'changed', 'yeah', 'yea', 'yep']
+    acceptable_responses = ['done', 'yes', 'yes?','finished', 'complete', 'completed', 'changed', 'yeah', 'yea', 'yep']
 
     # get monday's date
     date = get_mondays_date()
