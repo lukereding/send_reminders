@@ -39,7 +39,7 @@ def login_to_sheets():
     """Log in to google sheets via API and get the spreadsheet"""
     # use creds to create a client to interact with the Google Drive API
     scope = ['https://spreadsheets.google.com/feeds']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('/Users/lukereding/Downloads/secret_key.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name('/Users/{}/Downloads/secret_key.json'.format(os.environ["USER"]), scope)
     client = gspread.authorize(creds)
     # Find a workbook by name and open the first sheet
     # Make sure you use the right name here.
@@ -57,7 +57,7 @@ def get_quote():
     response = requests.post(url, data=data)
     return(str(response.text))
 
-def send_email(dict_of_recipients, password):
+def send_email(info, password):
     """Send reminder emails to everyone in dict_of_recipients."""
     session = smtplib.SMTP('smtp.gmail.com', 587)
     session.ehlo()
@@ -66,19 +66,27 @@ def send_email(dict_of_recipients, password):
         session.login('lukereding@gmail.com', password)
     except:
         print("could not log in")
-        # sys.exit(1)
+        sys.exit(1)
     # send the emails
-    for name, [email, rack] in dict_of_recipients.items():
-        # if it's monday, just send a 'letting you know' message
+    for email, x in info.items():
+        # parse items
+        name = x[0][0]
+        racks = x[1]
+        shelves = x[2]
+
+        todo = ""
+        for i, rack in enumerate(racks):
+            todo += "rack " + str(rack) + ", " + str(shelves[i]) + " shelf\n"
+
         if datetime.datetime.today().weekday() == 0:
             msg = MIMEText("""
 Hey {name},
 
 Congrats! You're on water change duty this week!
 
-You have been assigned rack {rack} this week.
+You have been assigned rack(s) {rack} this week.
 
-You can access the lab wiki for more information about water changes here: 
+You can access the lab wiki for more information about water changes here:
 https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
 
 Be sure to sign off when you're done here:
@@ -93,17 +101,19 @@ Luke
 
 
 
-{quote}""".format(rack = rack, name = name, quote = get_quote()))
+{quote}""".format(rack = str(list(set(racks))), name = name, quote = get_quote()))
         # otherwise
         else:
             msg = MIMEText("""
 Hey {name},
 
-Just a reminder that you are on water change duty this week. Water changes should be completed by the end of the week. Check the lab wiki for more information on water changes. You can access the wiki here: 
+Just a reminder that you are on water change duty this week. Water changes should be completed by the end of the week. Check the lab wiki for more information on water changes. You can access the wiki here:
 
 https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
 
-As a reminder, you have been assigned rack {rack} this week.
+Tanks that still need to be water changed:
+
+{todo}
 
 Be sure to sign off when you're done here:
 https://docs.google.com/spreadsheets/d/1pVwqyetFLGVl_2qQ40qCH0Nvhe7ODzKC7J_oyQsiOQg/edit?usp=sharing.
@@ -115,7 +125,7 @@ Luke
 
 
 
-{quote}""".format(rack = rack, name = name, quote = get_quote()))
+{quote}""".format(todo = todo, name = name, quote = get_quote()))
         msg['Subject'] = u'\U0001F514' + ' water changes this week'
         msg['From'] = 'info@lreding.com'
         msg['To'] = email
@@ -182,23 +192,50 @@ if __name__ == '__main__':
                           'Caleb': 'cnfleischer@gmail.com',
                           'Adam': 'adamredmer@hotmail.com'}
 
-        # create an empty dict of people to email
-        to_email = dict()
+        # create series of lists
+        names = []
+        emails = []
+        racks = []
+        shelves = []
 
         # find out who hasn't been doing their water changes
         for row in rows:
-            # if they haven't done their water change
-            if sheet.cell(row, 4).value.lower() not in acceptable_responses:
-                # to_email.append(sheet.cell(row, 3).value)
-                to_email[sheet.cell(row, 3).value] = [email_addresses[sheet.cell(row, 3).value], sheet.cell(row, 2).value]
+            # if they haven't done their water change, record
+            # a bunch of variables stored in lists
+            if sheet.cell(row, 5).value.lower() not in acceptable_responses:
+                name = sheet.cell(row, 4).value
+                names.append(name)
+                emails.append(email_addresses[name])
+                racks.append(sheet.cell(row, 2).value)
+                shelves.append(sheet.cell(row, 3).value)
 
+        # create dict of those to emails
+        to_email = dict((k, email_addresses[k]) for k in names)
+
+        info = {}
+
+        # loop through the new dict
+        for name, email in to_email.items():
+
+            # get the racks and shelves for that person
+            out = [[racks[i], shelves[i]] for i, nombre in enumerate(names) if nombre == name]
+
+            # make into lists`
+            r = []
+            s = []
+
+            for x, y in out:
+                r.append(x)
+                s.append(y)
+
+            info[email] = [[name], r, s]
+
+        # get password stored as environmental variable
         p = os.environ['gmail']
-
-        # pdb.set_trace()
 
         # send the emails
         try:
-            send_email(to_email, p)
+            send_email(info p)
             print("emails sent")
         except:
             print("Unexpected error:" + str(sys.exc_info()))
