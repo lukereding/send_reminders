@@ -190,7 +190,10 @@ if __name__ == '__main__':
                           'Daniel': 'danielhauser77@gmail.com',
                           'Huynh': 'huynhpham100@yahoo.com',
                           'Caleb': 'cnfleischer@gmail.com',
-                          'Adam': 'adamredmer@hotmail.com'}
+                          'Adam': 'adamredmer@hotmail.com',
+                          'Madison': 'catladiesrun@gmail.com',
+                          'Sylvestre': 'sylvesterpineau409@gmail.com',
+                          'Rachel' : 'rachel.koeter@gmail.com'}
 
         # create series of lists
         names = []
@@ -204,10 +207,13 @@ if __name__ == '__main__':
             # a bunch of variables stored in lists
             if sheet.cell(row, 5).value.lower() not in acceptable_responses:
                 name = sheet.cell(row, 4).value
-                names.append(name)
-                emails.append(email_addresses[name])
-                racks.append(sheet.cell(row, 2).value)
-                shelves.append(sheet.cell(row, 3).value)
+                if name not in email_addresses.keys():
+                    print("no email address for that name!")
+                else:
+                    names.append(name)
+                    emails.append(email_addresses[name])
+                    racks.append(sheet.cell(row, 2).value)
+                    shelves.append(sheet.cell(row, 3).value)
 
         # create dict of those to emails
         to_email = dict((k, email_addresses[k]) for k in names)
@@ -235,7 +241,7 @@ if __name__ == '__main__':
 
         # send the emails
         try:
-            send_email(info p)
+            send_email(info, p)
             print("emails sent")
         except:
             print("Unexpected error:" + str(sys.exc_info()))
