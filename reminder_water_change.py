@@ -82,26 +82,25 @@ def send_email(info, password):
             msg = MIMEText("""
 Hey {name},
 
-Congrats! You're on water change duty this week!
+Congratulations are in order: you're on water change duty this week! Water changes should be completed by the end of the week. Check the lab wiki for more information on water changes. You can access the wiki here:
 
-You have been assigned rack(s) {rack} this week.
-
-You can access the lab wiki for more information about water changes here:
 https://github.com/lukereding/cummings_lab_members/tree/master/current-members.
+
+This week you've been assigned:
+
+{todo}
 
 Be sure to sign off when you're done here:
 https://docs.google.com/spreadsheets/d/1pVwqyetFLGVl_2qQ40qCH0Nvhe7ODzKC7J_oyQsiOQg/edit?usp=sharing.
 
-And remember, come to one of the lab veterans with any questions you have.
-
-Thanks!
+Thanks a lot--
 
 Luke
 
 
 
 
-{quote}""".format(rack = str(list(set(racks))), name = name, quote = get_quote()))
+{quote}""".format(todo = todo, name = name, quote = get_quote()))
         # otherwise
         else:
             msg = MIMEText("""
@@ -126,6 +125,8 @@ Luke
 
 
 {quote}""".format(todo = todo, name = name, quote = get_quote()))
+
+
         msg['Subject'] = u'\U0001F514' + ' water changes this week'
         msg['From'] = 'info@lreding.com'
         msg['To'] = email
