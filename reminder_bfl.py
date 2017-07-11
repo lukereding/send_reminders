@@ -89,6 +89,7 @@ def get_email_address(name):
                         'Lily': 'lily.anastacia@gmail.com',
                         'Caleb': 'cnfleischer@gmail.com',
                         'Marisa': 'marisafajardo97@gmail.com',
+                       'Connor': 'cdfritz7@gmail.com',
                       'Jenny' : 'jschlauch@utexas.edu'}
     if name not in email_addresses:
         sys.exit('email address for {} not found.'.format(name))
