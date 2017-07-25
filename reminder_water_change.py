@@ -194,7 +194,8 @@ if __name__ == '__main__':
                           'Adam': 'adamredmer@hotmail.com',
                           'Madison': 'catladiesrun@gmail.com',
                           'Sylvestre': 'sylvesterpineau409@gmail.com',
-                          'Rachel' : 'rachel.koeter@gmail.com'}
+                          'Rachel' : 'rachel.koeter@gmail.com',
+                          'Teja' : 'tejasebastian@gmail.com'}
 
         # create series of lists
         names = []
