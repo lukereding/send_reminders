@@ -76,7 +76,7 @@ def send_email(info, password):
 
         todo = ""
         for i, rack in enumerate(racks):
-            todo += "rack " + str(rack) + ", " + str(shelves[i]) + " shelf\n"
+            todo += "rack " + str(shelves[i]) + ", " + str(rack) + "\n"
 
         if datetime.datetime.today().weekday() == 0:
             msg = MIMEText("""
@@ -195,7 +195,10 @@ if __name__ == '__main__':
                           'Madison': 'catladiesrun@gmail.com',
                           'Sylvestre': 'sylvesterpineau409@gmail.com',
                           'Rachel' : 'rachel.koeter@gmail.com',
-                          'Teja' : 'tejasebastian@gmail.com'}
+                          'Kathryn': 'kathrynmkaihlanen@utexas.edu',
+                          'Ben': 'benwhelan@utexas.edu',
+                          'Teja': 'tejasebastian@gmail.com',
+                          'Sam': 'samantha.kagel@utexas.edu'}
 
         # create series of lists
         names = []
