@@ -26,6 +26,8 @@ Its meant to be executed in as a cron job.
 
 `reminder_water_change.py` finds the previous Monday's date. It's meant to be executed on Thursday and Friday. So in `crontab -e`, add
 
-> 10 4 * * 4-5 python /Users/lukereding/anaconda2/envs/google_sheets/bin/python/reminder_water_change.py -e
+> 26 4 * * 4 . $HOME/.profile && /home/pi/miniconda3/envs/send_emails/bin/python /home/pi/Documents/send_reminders/reminder_water_change.py -e
+> 26 4 * * 5 . $HOME/.profile && /home/pi/miniconda3/envs/send_emails/bin/python /home/pi/Documents/send_reminders/reminder_water_change.py -e
+> 26 4 * * 1 . $HOME/.profile && /home/pi/miniconda3/envs/send_emails/bin/python /home/pi/Documents/send_reminders/reminder_water_change.py -e
 
-to check the google sheet and send an email to delinquents every Thursday and Friday at 4:10am. 
+to check the google sheet and send an email every Monday, Thursday, and Friday at 4:26am. 
