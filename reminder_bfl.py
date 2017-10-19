@@ -128,5 +128,6 @@ if __name__ == '__main__':
         send_email(addr, on_duty, p)
         print("email sent.")
     except:
+        send_email('lukereding@utexas.edu', 'Luke', p)
         print("Unexpected error:" + str(sys.exc_info()))
         print("some or all emails were not sent.")
