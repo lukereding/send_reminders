@@ -198,6 +198,13 @@ if __name__ == '__main__':
                           'Kathryn': 'kathrynmkaihlanen@utexas.edu',
                           'Ben': 'benwhelan@utexas.edu',
                           'Teja': 'tejasebastian@gmail.com',
+                          'Amogh': 'amoghkashyap55@gmail.com',
+                          'Jessika': 'jessika.mcfarland@utexas.edu',
+                          'Claire': 'claire.mayorga19@gmail.com',
+                          'Jeffrey': 'wjalliston@utexas.edu',
+                          'Remedy': 'remedyrule9@gmail.com',
+                          'Presley': 'presley.mackey@utexas.edu',
+                          'Vishaal': 'vishaalsakthi04@utexas.edu',
                           'Sam': 'samantha.kagel@utexas.edu'}
 
         # create series of lists
