@@ -9,6 +9,7 @@ import plivo
 import requests
 from email.mime.text import MIMEText
 import datetime
+import re
 
 ''''
 
@@ -43,7 +44,7 @@ def login_to_sheets():
     client = gspread.authorize(creds)
     # Find a workbook by name and open the first sheet
     # Make sure you use the right name here.
-    sheet = client.open("water changes summer 2017").sheet1
+    sheet = client.open("water changes Fall 2017").sheet1
     return sheet
 
 def get_quote():
@@ -214,13 +215,16 @@ if __name__ == '__main__':
         shelves = []
 
         # find out who hasn't been doing their water changes
+        regex = re.compile('[^a-zA-Z]')
         for row in rows:
             # if they haven't done their water change, record
             # a bunch of variables stored in lists
             if sheet.cell(row, 5).value.lower() not in acceptable_responses:
                 name = sheet.cell(row, 4).value
+                # exclude any non-alphabetic symbols from the name
+                name = regex.sub('', name)
                 if name not in email_addresses.keys():
-                    print("no email address for that name!")
+                    print("no email address for {}!".format(name))
                 else:
                     names.append(name)
                     emails.append(email_addresses[name])
