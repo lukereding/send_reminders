@@ -7,6 +7,7 @@ import sys
 import argparse
 import plivo
 import requests
+import subprocess
 from email.mime.text import MIMEText
 import datetime
 import re
@@ -35,6 +36,12 @@ def get_date():
     """Get today's date in the right format"""
     date = time.strftime('%d %B %Y')
     return date
+
+def get_dad_joke():
+    command = "curl -H \"Accept: text/plain\" https://icanhazdadjoke.com/"
+    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+    output, _ = process.communicate()
+    return output.decode('utf-8')
 
 def login_to_sheets():
     """Log in to google sheets via API and get the spreadsheet"""
@@ -101,7 +108,7 @@ Luke
 
 
 
-{quote}""".format(todo = todo, name = name, quote = get_quote()))
+{quote}""".format(todo = todo, name = name, quote = get_dad_joke()))
         # otherwise
         else:
             msg = MIMEText("""
@@ -125,7 +132,7 @@ Luke
 
 
 
-{quote}""".format(todo = todo, name = name, quote = get_quote()))
+{quote}""".format(todo = todo, name = name, quote = get_dad_joke()))
 
 
         msg['Subject'] = u'\U0001F514' + ' water changes this week'
