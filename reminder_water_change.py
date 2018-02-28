@@ -215,6 +215,7 @@ if __name__ == '__main__':
                           'Vishaal': 'vishaalsakthi04@utexas.edu',
                           'Eduardo': 'eduardosaucedo12@utexas.edu',
                           'Melody': 'melody.ziari@gmail.com',
+                          'Alex': 'alexysdeguzman@utexas.edu',
                           'Sam': 'samantha.kagel@utexas.edu'}
 
         # create series of lists
