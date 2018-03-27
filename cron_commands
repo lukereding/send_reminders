@@ -1,0 +1,3 @@
+26 4 * * 1 . ~/.bash_profile && /Users/lukereding/miniconda3/envs/google_sheets3/bin/python /Users/lukereding/Documents/send_reminders/reminder_water_change.py -e 
+31 4 * * 4-5 . ~/.bash_profile && /Users/lukereding/miniconda3/envs/google_sheets3/bin/python /Users/lukereding/Documents/send_reminders/reminder_water_change.py -e && say reminded
+14 4 * * * . ~/.bash_profile && cd /Users/lukereding/Documents/send_reminders/ && git pull && say pulled `pwd` || say did not work
